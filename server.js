@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 // Connect to our MongoDB using Mongoose
 const mongoose = require('mongoose');
@@ -21,9 +22,14 @@ db.once('open', () => {
   Todos = mongoose.model('Todo', todoSchema);
 })
 
+
+
 let app = express();
 app.use(bodyParser.json({limit:'5mb'}));
 app.use(bodyParser.urlencoded({extended:true}));
+
+// Serve only the static files from the dist directory
+app.use(express.static(__dirname + '/dist'));
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4201');    
@@ -31,6 +37,10 @@ app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');      
   res.setHeader('Access-Control-Allow-Credentials', true);       
   next();  
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname+'/dist/index.html'));
 });
 
 app.post('/api/saveTodo', (req, res) => {
