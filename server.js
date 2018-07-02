@@ -39,9 +39,7 @@ app.use(function(req, res, next) {
   next();  
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname+'/dist/index.html'));
-});
+
 
 app.post('/api/saveTodo', (req, res) => {
   const mod = new model(req.body);
@@ -71,6 +69,10 @@ app.get('/api/todos', (req, res) => {
     if (err) console.error(err);
     res.send(todos);
   })
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname+'/dist/index.html'));
 });
 
 app.listen(8080, () => console.log('A magic kingdom is born on port 8080!'));
